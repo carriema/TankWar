@@ -30,7 +30,7 @@ public class TankClient extends Frame{
             }
         });
         this.setVisible(true);
-        this.addKeyListener(new DirectControl());
+        this.addKeyListener(new KeyMonitor());
 
         new Thread(new PaintThread()).start();
     }
@@ -53,26 +53,11 @@ public class TankClient extends Frame{
         }
     }
 
-    private class DirectControl extends KeyAdapter {
+    private class KeyMonitor extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            int key =  e.getKeyCode();
-            switch(key) {
-                case KeyEvent.VK_LEFT:
-                    myTank.setPosX(myTank.getPosX() - 3);
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    myTank.setPosX(myTank.getPosX() + 3);
-                    break;
-                case KeyEvent.VK_UP:
-                    myTank.setPosY(myTank.getPosY() - 3);
-                    break;
-                case KeyEvent.VK_DOWN:
-                    myTank.setPosY(myTank.getPosY() + 3);
-                    break;
-            }
-
+            myTank.keyPressed(e);
         }
     }
 

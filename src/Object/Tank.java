@@ -2,6 +2,8 @@ package Object;
 
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+
 /**
  * Created by myr on 6/21/17.
  */
@@ -42,6 +44,26 @@ public class Tank{
 
     public void setPosY(int y) {
         this.POS_Y = y;
+    }
+
+
+    public void keyPressed(KeyEvent e) {
+        int key =  e.getKeyCode();
+        switch(key) {
+            case KeyEvent.VK_LEFT:
+                POS_X -= 3;
+                break;
+            case KeyEvent.VK_RIGHT:
+                POS_X += 3;
+                break;
+            case KeyEvent.VK_UP:
+                POS_Y -= 3;
+                break;
+            case KeyEvent.VK_DOWN:
+                POS_Y += 3;
+                break;
+        }
+
     }
 
 }
