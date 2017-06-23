@@ -16,6 +16,10 @@ public class TankClient extends Frame{
 
     public void paint(Graphics g) {
         myTank.draw(g);
+        for (Bomb b : myTank.getBombs()) {
+            b.draw(g);
+        }
+
     }
 
     public void launchFrame() {

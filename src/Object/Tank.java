@@ -3,6 +3,7 @@ package Object;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 
 /**
@@ -15,17 +16,21 @@ public class Tank{
     private int SPEED = 3;
     private final int ROUND = 30;
     private Direction dir = Direction.STAY;
+    private ArrayList<Bomb> bombs;
+
 
     boolean bL = false, bU = false, bR = false, bD = false;
 
     public Tank() {
         POS_X = 100;
         POS_Y = 100;
+        bombs = new ArrayList<Bomb>();
     }
 
     public Tank(int x, int y) {
         this.POS_X = x;
         this.POS_Y = y;
+        bombs = new ArrayList<Bomb>();
     }
 
     public void draw(Graphics g) {
@@ -34,6 +39,10 @@ public class Tank{
         move();
         g.fillOval(POS_X, POS_Y,ROUND, ROUND);
         g.setColor(c);
+    }
+
+    public ArrayList<Bomb> getBombs() {
+        return bombs;
     }
 
     public void setDirection() {
@@ -93,6 +102,10 @@ public class Tank{
         }
     }
 
+    public int getRound() {
+        return ROUND;
+    }
+
     public int getPosX() {
         return this.POS_X;
     }
@@ -124,6 +137,8 @@ public class Tank{
             case KeyEvent.VK_DOWN:
                 bD = false;
                 break;
+            case KeyEvent.VK_SPACE:
+                bombs.add(new Bomb(dir, this));
         }
     }
 
