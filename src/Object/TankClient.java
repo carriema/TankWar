@@ -7,20 +7,15 @@ import java.awt.event.*;
  */
 public class TankClient extends Frame{
 
-    private int pos_x = 50;
-    private int pos_y = 50;
-    private int circle_size = 30;
-
     public static final int FRAME_WIDTH = 1000;
     public static final int FRAME_HEIGHT = 600;
     public static final int FRAME_X = 100;
     public static final int FRAME_Y = 100;
 
+    Tank myTank = new Tank(100,100);
+
     public void paint(Graphics g) {
-        Color c = g.getColor();
-        g.setColor(Color.red);
-        g.fillOval(pos_x,pos_y,circle_size,circle_size);
-        g.setColor(c);
+        myTank.draw(g);
     }
 
     public void launchFrame() {
@@ -65,16 +60,16 @@ public class TankClient extends Frame{
             int key =  e.getKeyCode();
             switch(key) {
                 case KeyEvent.VK_LEFT:
-                    pos_x -= 3;
+                    myTank.setPosX(myTank.getPosX() - 3);
                     break;
                 case KeyEvent.VK_RIGHT:
-                    pos_x += 3;
+                    myTank.setPosX(myTank.getPosX() + 3);
                     break;
                 case KeyEvent.VK_UP:
-                    pos_y -= 3;
+                    myTank.setPosY(myTank.getPosY() - 3);
                     break;
                 case KeyEvent.VK_DOWN:
-                    pos_y += 3;
+                    myTank.setPosY(myTank.getPosY() + 3);
                     break;
             }
 
