@@ -1,9 +1,6 @@
 package Object;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 /**
  * Created by myr on 6/21/16.
@@ -19,37 +16,11 @@ public class TankClient extends Frame{
     public static final int FRAME_X = 100;
     public static final int FRAME_Y = 100;
 
-    private int x_change = 0;
-    private int y_change = 0;
-
-    private Direction direction = Direction.STAY;
-
-    private void directionChange() {
-        if (direction == Direction.UP) {
-            x_change = 0;
-            y_change = -3;
-        } else if (direction == Direction.DOWN) {
-            x_change = 0;
-            y_change = 3;
-        } else if (direction == Direction.LEFT) {
-            x_change = -3;
-            y_change = 0;
-        } else if (direction == Direction.RIGHT) {
-            x_change = 3;
-            y_change = 0;
-        } else {
-            x_change = 0;
-            y_change = 0;
-        }
-    }
-
     public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.red);
         g.fillOval(pos_x,pos_y,circle_size,circle_size);
         g.setColor(c);
-        pos_y += y_change;
-        pos_x += x_change;
     }
 
     public void launchFrame() {
@@ -64,6 +35,7 @@ public class TankClient extends Frame{
             }
         });
         this.setVisible(true);
+        this.addKeyListener(new DirectControl());
 
         new Thread(new PaintThread()).start();
     }
@@ -86,30 +58,25 @@ public class TankClient extends Frame{
         }
     }
 
-    private class DirectControl implements KeyListener {
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-
-        }
+    private class DirectControl extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_KP_LEFT || e.getKeyCode() == KeyEvent.VK_LEFT) {
-                direction = Direction.LEFT;
-            } else if (e.getKeyCode() == KeyEvent.VK_KP_RIGHT || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                direction = Direction.RIGHT;
-            } else if (e.getKeyCode() == KeyEvent.VK_KP_UP || e.getKeyCode() == KeyEvent.VK_UP) {
-                direction = Direction.UP;
-            } else if (e.getKeyCode() == KeyEvent.VK_KP_DOWN || e.getKeyCode() == KeyEvent.VK_DOWN) {
-                direction = Direction.DOWN;
+            int key =  e.getKeyCode();
+            switch(key) {
+                case KeyEvent.VK_LEFT:
+                    pos_x -= 3;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    pos_x += 3;
+                    break;
+                case KeyEvent.VK_UP:
+                    pos_y -= 3;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    pos_y += 3;
+                    break;
             }
-            directionChange();
-
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
 
         }
     }
