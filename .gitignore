@@ -22,3 +22,8 @@ out/production/TankWar/Object/Tank.class
 out/production/TankWar/Object/TankClient.class
 
 TankWar.iml
+
+*.class
+
+
+out/production/TankWar/Object/TankClient$KeyMonitor.class
