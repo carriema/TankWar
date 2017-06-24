@@ -1,5 +1,7 @@
 package Object;
 
+import Utils.Constants;
+
 import java.awt.*;
 
 /**
@@ -8,17 +10,19 @@ import java.awt.*;
 public class Bomb {
 
     private Direction dir;
-    private final int ROUND = 5;
+    private final int ROUND = Constants.BOMB_SIZE;
     private Tank belongToTank;
     private int POS_X;
     private int POS_Y;
     private int SPEED = 6;
+    private boolean alive;
 
     public Bomb(Direction d, Tank tank) {
         this.dir = d;
         belongToTank = tank;
         this.POS_X = belongToTank.getPosX() + belongToTank.getRound()/2;
         this.POS_Y = belongToTank.getPosY() + belongToTank.getRound()/2;
+        alive = true;
     }
 
     public void move() {
@@ -56,10 +60,22 @@ public class Bomb {
 
     public void draw(Graphics g) {
         move();
-        Color c = g.getColor();
-        g.setColor(Color.BLACK);
-        g.fillOval(POS_X, POS_Y, ROUND, ROUND);
-        g.setColor(c);
+        if (alive) {
+            Color c = g.getColor();
+            g.setColor(Color.BLACK);
+            g.fillOval(POS_X, POS_Y, ROUND, ROUND);
+            g.setColor(c);
+        }
+
+    }
+
+
+    public boolean isAlive() {
+        if (POS_X > Constants.FRAME_WIDTH || POS_X < 0
+                || POS_Y > Constants.FRAME_HEIGHT || POS_Y < 0) {
+            alive = false;
+        }
+        return alive;
     }
 
 }

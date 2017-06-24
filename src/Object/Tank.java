@@ -1,5 +1,7 @@
 package Object;
 
+import Utils.Constants;
+
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -14,9 +16,11 @@ public class Tank{
     private int POS_X;
     private int POS_Y;
     private int SPEED = 3;
-    private final int ROUND = 30;
+    private final int ROUND = Constants.TANK_SIZE;
     private Direction dir = Direction.STAY;
     private ArrayList<Bomb> bombs;
+    private Direction barrelDir = Direction.U;
+    private final int barrelLength = 20;
 
 
     boolean bL = false, bU = false, bR = false, bD = false;
@@ -38,11 +42,46 @@ public class Tank{
         g.setColor(Color.RED);
         move();
         g.fillOval(POS_X, POS_Y,ROUND, ROUND);
-        g.setColor(c);
-    }
 
-    public ArrayList<Bomb> getBombs() {
-        return bombs;
+        for (int i = 0; i < bombs.size(); i++) {
+            Bomb b = bombs.get(i);
+            if (!b.isAlive()) {
+                bombs.remove(i);
+            } else {
+                b.draw(g);
+            }
+        }
+
+        g.drawString(String.valueOf(bombs.size()), 100, 100);
+        g.setColor(Color.darkGray);
+        switch(barrelDir) {
+            case D:
+                g.drawLine(POS_X + ROUND/2, POS_Y + ROUND/2, POS_X + ROUND/2, POS_Y + ROUND/2 + barrelLength);
+                break;
+            case U:
+                g.drawLine(POS_X + ROUND/2, POS_Y + ROUND/2, POS_X + ROUND/2, POS_Y + ROUND/2 - barrelLength);
+                break;
+            case L:
+                g.drawLine(POS_X + ROUND/2, POS_Y + ROUND/2, POS_X + ROUND/2 - barrelLength, POS_Y + ROUND/2);
+                break;
+            case R:
+                g.drawLine(POS_X + ROUND/2, POS_Y + ROUND/2, POS_X + ROUND/2 + barrelLength, POS_Y + ROUND/2);
+                break;
+            case LU:
+                g.drawLine(POS_X + ROUND/2, POS_Y + ROUND/2, POS_X + ROUND/2 - (int)(0.7*barrelLength), POS_Y + ROUND/2 - (int)(0.7*barrelLength));
+                break;
+            case RU:
+                g.drawLine(POS_X + ROUND/2, POS_Y + ROUND/2, POS_X + ROUND/2 + (int)(0.7*barrelLength), POS_Y + ROUND/2 - (int)(0.7*barrelLength));
+                break;
+            case LD:
+                g.drawLine(POS_X + ROUND/2, POS_Y + ROUND/2, POS_X + ROUND/2 - (int)(0.7*barrelLength), POS_Y + ROUND/2 + (int)(0.7*barrelLength));
+                break;
+            case RD:
+                g.drawLine(POS_X + ROUND/2, POS_Y + ROUND/2, POS_X + ROUND/2 + (int)(0.7*barrelLength), POS_Y + ROUND/2 + (int)(0.7*barrelLength));
+                break;
+
+        }
+        g.setColor(c);
     }
 
     public void setDirection() {
@@ -64,6 +103,9 @@ public class Tank{
             dir = Direction.RD;
         } else {
             dir = Direction.STAY;
+        }
+        if (dir != Direction.STAY) {
+            barrelDir = dir;
         }
     }
 
@@ -138,7 +180,7 @@ public class Tank{
                 bD = false;
                 break;
             case KeyEvent.VK_SPACE:
-                bombs.add(new Bomb(dir, this));
+                bombs.add(new Bomb(barrelDir, this));
         }
     }
 

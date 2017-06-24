@@ -1,4 +1,6 @@
 package Object;
+import Utils.Constants;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -7,8 +9,6 @@ import java.awt.event.*;
  */
 public class TankClient extends Frame{
 
-    public static final int FRAME_WIDTH = 1000;
-    public static final int FRAME_HEIGHT = 600;
     public static final int FRAME_X = 100;
     public static final int FRAME_Y = 100;
 
@@ -16,15 +16,13 @@ public class TankClient extends Frame{
 
     public void paint(Graphics g) {
         myTank.draw(g);
-        for (Bomb b : myTank.getBombs()) {
-            b.draw(g);
-        }
+
 
     }
 
     public void launchFrame() {
         this.setLocation(FRAME_X, FRAME_Y);
-        this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        this.setSize(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
         this.setResizable(false);
         this.setBackground(Color.GREEN);
         this.addWindowListener(new WindowAdapter() {
