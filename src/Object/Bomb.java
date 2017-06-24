@@ -11,18 +11,21 @@ public class Bomb {
 
     private Direction dir;
     private final int ROUND = Constants.BOMB_SIZE;
-    private Tank belongToTank;
+    private TankClient tc;
     private int POS_X;
     private int POS_Y;
     private int SPEED = 6;
-    private boolean alive;
+    private boolean alive = true;
 
-    public Bomb(Direction d, Tank tank) {
+    public Bomb(Direction d, int x, int y) {
         this.dir = d;
-        belongToTank = tank;
-        this.POS_X = belongToTank.getPosX() + belongToTank.getRound()/2;
-        this.POS_Y = belongToTank.getPosY() + belongToTank.getRound()/2;
-        alive = true;
+        POS_X = x;
+        POS_Y = y;
+    }
+
+    public Bomb(Direction d, int x, int y, TankClient tc) {
+        this(d,x,y);
+        this.tc = tc;
     }
 
     public void move() {
@@ -59,23 +62,21 @@ public class Bomb {
     }
 
     public void draw(Graphics g) {
+        Color c = g.getColor();
+        g.setColor(Color.BLACK);
+        g.fillOval(POS_X, POS_Y, ROUND, ROUND);
+        g.setColor(c);
         move();
-        if (alive) {
-            Color c = g.getColor();
-            g.setColor(Color.BLACK);
-            g.fillOval(POS_X, POS_Y, ROUND, ROUND);
-            g.setColor(c);
-        }
-
+        isAlive();
     }
 
 
-    public boolean isAlive() {
+    public void isAlive() {
         if (POS_X > Constants.FRAME_WIDTH || POS_X < 0
                 || POS_Y > Constants.FRAME_HEIGHT || POS_Y < 0) {
             alive = false;
+            tc.getBombs().remove(this);
         }
-        return alive;
     }
 
 }

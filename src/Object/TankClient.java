@@ -3,6 +3,7 @@ import Utils.Constants;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 /**
  * Created by myr on 6/21/16.
@@ -12,12 +13,19 @@ public class TankClient extends Frame{
     public static final int FRAME_X = 100;
     public static final int FRAME_Y = 100;
 
-    Tank myTank = new Tank(100,100);
+    private Tank myTank = new Tank(100,100,this);
+    private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
+
+    public ArrayList getBombs() {
+        return bombs;
+    }
 
     public void paint(Graphics g) {
         myTank.draw(g);
-
-
+        for (int i = 0; i < bombs.size(); i++) {
+            bombs.get(i).draw(g);
+        }
+        g.drawString(String.valueOf(bombs.size()), 100, 100);
     }
 
     public void launchFrame() {
