@@ -76,12 +76,16 @@ public class TankClient extends Frame{
         tc.launchFrame();
     }
 
+    public ArrayList getTanks() {
+        return tanks;
+    }
+
     private class PaintThread implements Runnable {
         public void run() {
             while (true) {
                 repaint();
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(40);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

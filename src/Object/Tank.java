@@ -2,8 +2,7 @@ package Object;
 
 import Utils.Constants;
 
-import java.awt.Graphics;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
@@ -22,6 +21,7 @@ public class Tank{
     private final int barrelLength = 20;
     TankClient tc;
     private boolean bGood;
+    private boolean alive = true;
 
 
     boolean bL = false, bU = false, bR = false, bD = false;
@@ -80,6 +80,10 @@ public class Tank{
         g.fillOval(POS_X, POS_Y,ROUND, ROUND);
         drawBarrelPos(g);
         g.setColor(c);
+
+        if (!alive) {
+            tc.getTanks().remove(this);
+        }
     }
 
     public void setDirection() {
@@ -185,6 +189,10 @@ public class Tank{
         }
     }
 
+    public void setAlive(boolean isAlive) {
+        this.alive = isAlive;
+    }
+
 
 
     public void fire() {
@@ -209,7 +217,10 @@ public class Tank{
                 bD = true;
                 break;
         }
+    }
 
+    public Rectangle getRect() {
+        return new Rectangle(POS_X,POS_Y,ROUND,ROUND);
     }
 
 }

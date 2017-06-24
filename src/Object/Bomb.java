@@ -3,6 +3,7 @@ package Object;
 import Utils.Constants;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by myr on 6/23/17.
@@ -59,6 +60,10 @@ public class Bomb {
                 POS_Y += SPEED;
                 break;
         }
+        isAlive();
+        if (!alive) {
+            tc.getBombs().remove(this);
+        }
     }
 
     public void draw(Graphics g) {
@@ -67,15 +72,36 @@ public class Bomb {
         g.fillOval(POS_X, POS_Y, ROUND, ROUND);
         g.setColor(c);
         move();
-        isAlive();
     }
 
-
     public void isAlive() {
+        hitTank();
         if (POS_X > Constants.FRAME_WIDTH || POS_X < 0
                 || POS_Y > Constants.FRAME_HEIGHT || POS_Y < 0) {
             alive = false;
-            tc.getBombs().remove(this);
+        }
+    }
+
+//    public void isAlive() {
+//        if (POS_X > Constants.FRAME_WIDTH || POS_X < 0
+//                || POS_Y > Constants.FRAME_HEIGHT || POS_Y < 0) {
+//            alive = false;
+//            tc.getBombs().remove(this);
+//        }
+//    }
+
+    public Rectangle getRect() {
+        return new Rectangle(POS_X,POS_Y,ROUND,ROUND);
+    }
+
+    public void hitTank() {
+        ArrayList<Tank> tanks = tc.getTanks();
+        for (int i = 0; i < tanks.size(); i++) {
+            if (this.getRect().intersects(tanks.get(i).getRect())) {
+                tanks.get(i).setAlive(false);
+                this.alive = false;
+                return;
+            }
         }
     }
 
