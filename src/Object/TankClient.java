@@ -13,19 +13,44 @@ public class TankClient extends Frame{
     public static final int FRAME_X = 100;
     public static final int FRAME_Y = 100;
 
-    private Tank myTank = new Tank(100,100,this);
+    private Tank myTank = new Tank(100,100,this, true);
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
+    private ArrayList<Tank> tanks = new ArrayList<Tank>();
+    Image offScreenImage = null;
+
+    public void generateTank(boolean bGood) {
+
+        tanks.add(new Tank(this, bGood));
+    }
 
     public ArrayList getBombs() {
         return bombs;
     }
 
+    public void update(Graphics g) {
+        if (offScreenImage == null) {
+            offScreenImage = this.createImage(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
+        }
+        Graphics gOffScreen = offScreenImage.getGraphics();
+        Color c = gOffScreen.getColor();
+        gOffScreen.setColor(Color.green);
+        gOffScreen.fillRect(0, 0, Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
+        paint(gOffScreen);
+        gOffScreen.setColor(c);
+        g.drawImage(offScreenImage, 0, 0, null);
+
+    }
+
     public void paint(Graphics g) {
+        g.setColor(Color.black);
+        g.drawString(String.valueOf(bombs.size()), 100, 100);
         myTank.draw(g);
         for (int i = 0; i < bombs.size(); i++) {
             bombs.get(i).draw(g);
         }
-        g.drawString(String.valueOf(bombs.size()), 100, 100);
+        for (int i = 0; i < tanks.size(); i++) {
+            tanks.get(i).draw(g);
+        }
     }
 
     public void launchFrame() {
@@ -39,6 +64,7 @@ public class TankClient extends Frame{
                 System.exit(0);
             }
         });
+        generateTank(false);
         this.setVisible(true);
         this.addKeyListener(new KeyMonitor());
 
@@ -55,7 +81,7 @@ public class TankClient extends Frame{
             while (true) {
                 repaint();
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

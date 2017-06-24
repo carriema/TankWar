@@ -5,6 +5,7 @@ import Utils.Constants;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 
 /**
@@ -25,16 +26,13 @@ public class Tank{
 
     boolean bL = false, bU = false, bR = false, bD = false;
 
-    public Tank() {
-        POS_X = 100;
-        POS_Y = 100;
-    }
+    public Tank(TankClient tc, boolean bGood) {
+        Random r = new Random();
+        POS_X = r.nextInt(Constants.FRAME_WIDTH - ROUND);
+        POS_Y = r.nextInt(Constants.FRAME_HEIGHT - ROUND);
 
-    public Tank(int x, int y, TankClient tc) {
-        this.POS_X = x;
-        this.POS_Y = y;
         this.tc = tc;
-        this.bGood = false;
+        this.bGood = bGood;
     }
 
     public Tank(int x, int y, TankClient tc, boolean bGood) {
