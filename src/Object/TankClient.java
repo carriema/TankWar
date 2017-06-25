@@ -12,13 +12,14 @@ public class TankClient extends Frame{
 
     public static final int FRAME_X = 100;
     public static final int FRAME_Y = 100;
-    private final int MAX_TANKS = 5;
+    private final int MAX_TANKS = 6;
 
     private MyTank myTank = new MyTank(this);
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
     private ArrayList<Tank> tanks = new ArrayList<Tank>();
     Image offScreenImage = null;
     private ArrayList<Explode> explodes = new ArrayList<Explode>();
+    private ArrayList<Wall> walls = new ArrayList<Wall>();
 
     public void generateTank(boolean bGood) {
         while (tanks.size() < MAX_TANKS) {
@@ -52,7 +53,7 @@ public class TankClient extends Frame{
         generateTank(false);
         g.setColor(Color.black);
         g.drawString(String.valueOf(bombs.size()), 100, 100);
-        myTank.draw(g);
+//        myTank.draw(g);
         for (int i = 0; i < bombs.size(); i++) {
             bombs.get(i).draw(g);
         }
@@ -62,10 +63,15 @@ public class TankClient extends Frame{
         for (int i = 0; i < explodes.size(); i++) {
             explodes.get(i).draw(g);
         }
+        for (int i = 0; i < walls.size(); i++) {
+            walls.get(i).draw(g);
+        }
     }
 
     public void launchFrame() {
         tanks.add(myTank);
+        walls.add(new Wall(200, 200, 300, 20, this));
+        walls.add(new Wall(400, 100, 20, 350, this));
         this.setLocation(FRAME_X, FRAME_Y);
         this.setSize(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
         this.setResizable(false);
@@ -104,6 +110,10 @@ public class TankClient extends Frame{
         }
     }
 
+    public ArrayList<Wall> getWalls() {
+        return walls;
+    }
+
     private class KeyMonitor extends KeyAdapter {
 
         @Override
@@ -114,10 +124,6 @@ public class TankClient extends Frame{
         public void keyPressed(KeyEvent e) {
             myTank.keyPressed(e);
         }
-    }
-
-    public Tank getMyTank() {
-        return myTank;
     }
 
 }

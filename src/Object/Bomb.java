@@ -78,6 +78,7 @@ public class Bomb {
 
     public void isAlive() {
         hitTank();
+        hitWall();
         if (POS_X > Constants.FRAME_WIDTH || POS_X < 0
                 || POS_Y > Constants.FRAME_HEIGHT || POS_Y < 0) {
             alive = false;
@@ -90,13 +91,6 @@ public class Bomb {
     }
 
     public void hitTank() {
-        if (!good && this.getRect().intersects(tc.getMyTank().getRect())) {
-            Tank myTank = tc.getMyTank();
-            myTank.setAlive(false);
-            this.alive = false;
-            tc.getExplodes().add(new Explode(myTank.getPosX(), myTank.getPosY(),this.tc));
-            return;
-        }
         ArrayList<Tank> tanks = tc.getTanks();
         for (int i = 0; i < tanks.size(); i++) {
             if (this.good != tanks.get(i).isGood() && this.getRect().intersects(tanks.get(i).getRect())) {
@@ -105,6 +99,14 @@ public class Bomb {
                 this.alive = false;
                 tc.getExplodes().add(new Explode(hitTank.getPosX(), hitTank.getPosY(),this.tc));
                 return;
+            }
+        }
+    }
+
+    public void hitWall() {
+        for (Wall w : tc.getWalls()) {
+            if (w.getRect().intersects(this.getRect())) {
+                this.alive = false;
             }
         }
     }

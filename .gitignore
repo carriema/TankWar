@@ -27,3 +27,8 @@ TankWar.iml
 
 
 out/production/TankWar/Object/TankClient$KeyMonitor.class
+
+
+*.xml
+
+out/production/TankWar/Object/TankClient$KeyMonitor.class

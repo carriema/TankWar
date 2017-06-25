@@ -1,6 +1,7 @@
 package Object;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 /**
  * Created by myr on 6/24/17.
@@ -36,6 +37,13 @@ public class MyTank extends Tank {
         }
         if (dir != Direction.STAY) {
             barrelDir = dir;
+        }
+        ArrayList<Tank> tanks = tc.getTanks();
+        for (Tank b : tanks) {
+            if (!this.equals(b) && this.getRect().intersects(b.getRect())) {
+                this.dir = Direction.STAY;
+                b.changeDirection(Direction.STAY);
+            }
         }
     }
 
@@ -80,7 +88,9 @@ public class MyTank extends Tank {
                 bD = false;
                 break;
             case KeyEvent.VK_SPACE:
-                fire();
+                if (alive) {
+                    fire();
+                }
                 break;
         }
     }

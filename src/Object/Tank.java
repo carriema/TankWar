@@ -4,6 +4,7 @@ import Utils.Constants;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -14,6 +15,8 @@ public class Tank{
 
     protected int POS_X;
     protected int POS_Y;
+    protected int oldX;
+    protected int oldY;
     private int SPEED = 3;
     protected final int ROUND = Constants.TANK_SIZE;
     protected Direction dir = Direction.STAY;
@@ -31,9 +34,10 @@ public class Tank{
     public Tank(TankClient tc, boolean bGood) {
         POS_X = r.nextInt(Constants.FRAME_WIDTH - ROUND);
         POS_Y = r.nextInt(Constants.FRAME_HEIGHT - ROUND);
-
         this.tc = tc;
         this.bGood = bGood;
+        oldX = POS_X + 20;
+        oldY = POS_Y - 20;
     }
 
     public Tank(int x, int y, TankClient tc, boolean bGood) {
@@ -41,6 +45,18 @@ public class Tank{
         this.POS_Y = y;
         this.tc = tc;
         this.bGood = bGood;
+        oldX = POS_X;
+        oldY = POS_Y;
+    }
+
+    public boolean hitTank(Tank b) {
+        if (!this.equals(b) && this.getRect().intersects(b.getRect())) {
+            POS_X = oldX;
+            POS_Y = oldY;
+            dir = directions[r.nextInt(8)];
+            return true;
+        }
+        return false;
     }
 
     public boolean isGood() {
@@ -77,6 +93,9 @@ public class Tank{
 
         }
     }
+    public void changeDirection(Direction newDir) {
+        this.dir = newDir;
+    }
 
     public void draw(Graphics g) {
         Color c = g.getColor();
@@ -87,6 +106,9 @@ public class Tank{
         g.setColor(c);
 
         if (!alive) {
+            if (this instanceof MyTank) {
+                g.drawString("Game Over", POS_X, POS_Y);
+            }
             tc.getTanks().remove(this);
         }
     }
@@ -105,10 +127,11 @@ public class Tank{
         if (r.nextInt(40) > 35) {
             fire();
         }
-
     }
 
     public void move() {
+        oldX = POS_X;
+        oldY = POS_Y;
         setDirection();
         switch(dir) {
             case D:
@@ -143,6 +166,15 @@ public class Tank{
         }
         POS_X = POS_X <= 0 ? 0 : POS_X >= Constants.FRAME_WIDTH - ROUND ? Constants.FRAME_WIDTH - ROUND: POS_X;
         POS_Y = POS_Y <= 23 ? 23 : POS_Y >= Constants.FRAME_HEIGHT - ROUND ? Constants.FRAME_HEIGHT - ROUND: POS_Y;
+        ArrayList<Wall> walls = tc.getWalls();
+        for (Wall w : walls) {
+            hitWall(w);
+        }
+
+        ArrayList<Tank> tanks = tc.getTanks();
+        for (Tank c : tanks) {
+            this.hitTank(c);
+        }
     }
 
     public int getRound() {
@@ -175,6 +207,17 @@ public class Tank{
         int x = POS_X + ROUND/2;
         int y = POS_Y + ROUND/2;
         tc.getBombs().add(new Bomb(barrelDir,x,y,this.tc, bGood));
+    }
+
+    public boolean hitWall(Wall w) {
+        if (this.getRect().intersects(w.getRect())) {
+            POS_X = oldX;
+            POS_Y = oldY;
+            dir = directions[r.nextInt(8)];
+
+            return true;
+        }
+        return false;
     }
 
 
