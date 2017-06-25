@@ -15,19 +15,19 @@ public class Tank{
     private int POS_X;
     private int POS_Y;
     private int SPEED = 3;
-    private final int ROUND = Constants.TANK_SIZE;
-    private Direction dir = Direction.STAY;
-    private Direction barrelDir = Direction.U;
-    private final int barrelLength = 20;
+    protected final int ROUND = Constants.TANK_SIZE;
+    protected Direction dir = Direction.STAY;
+    protected Direction barrelDir = Direction.U;
+    protected final int barrelLength = 20;
     TankClient tc;
-    private boolean bGood;
-    private boolean alive = true;
+    protected boolean bGood;
+    protected boolean alive = true;
+    private Random r = new Random();
 
 
-    boolean bL = false, bU = false, bR = false, bD = false;
+
 
     public Tank(TankClient tc, boolean bGood) {
-        Random r = new Random();
         POS_X = r.nextInt(Constants.FRAME_WIDTH - ROUND);
         POS_Y = r.nextInt(Constants.FRAME_HEIGHT - ROUND);
 
@@ -87,25 +87,9 @@ public class Tank{
     }
 
     public void setDirection() {
-        if (bL == true && bU == false && bR == false && bD == false) {
-            dir = Direction.L;
-        } else if (bL == false && bU == true && bR == false && bD == false) {
-            dir = Direction.U;
-        } else if (bL == false && bU == false && bR == true && bD == false) {
-            dir = Direction.R;
-        } else if (bL == false && bU == false && bR == false && bD == true) {
-            dir = Direction.D;
-        } else if (bL == true && bU == true && bR == false && bD == false) {
-            dir = Direction.LU;
-        } else if (bL == true && bU == false && bR == false && bD == true) {
-            dir = Direction.LD;
-        } else if (bL == false && bU == true && bR == true && bD == false) {
-            dir = Direction.RU;
-        } else if (bL == false && bU == false && bR == true && bD == true) {
-            dir = Direction.RD;
-        } else {
-            dir = Direction.STAY;
-        }
+        Direction[] directions = {Direction.D, Direction.L, Direction.LD, Direction.LU,Direction.R,
+                Direction.RD,Direction.RU,Direction.STAY,Direction.U} ;
+        dir = directions[r.nextInt(directions.length)];
         if (dir != Direction.STAY) {
             barrelDir = dir;
         }
@@ -168,26 +152,6 @@ public class Tank{
         this.POS_Y = y;
     }
 
-    public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
-        switch(key) {
-            case KeyEvent.VK_LEFT:
-                bL = false;
-                break;
-            case KeyEvent.VK_RIGHT:
-                bR = false;
-                break;
-            case KeyEvent.VK_UP:
-                bU = false;
-                break;
-            case KeyEvent.VK_DOWN:
-                bD = false;
-                break;
-            case KeyEvent.VK_SPACE:
-                fire();
-                break;
-        }
-    }
 
     public void setAlive(boolean isAlive) {
         this.alive = isAlive;
@@ -201,23 +165,6 @@ public class Tank{
         tc.getBombs().add(new Bomb(barrelDir,x,y,this.tc));
     }
 
-    public void keyPressed(KeyEvent e) {
-        int key =  e.getKeyCode();
-        switch(key) {
-            case KeyEvent.VK_LEFT:
-                bL = true;
-                break;
-            case KeyEvent.VK_RIGHT:
-                bR = true;
-                break;
-            case KeyEvent.VK_UP:
-                bU = true;
-                break;
-            case KeyEvent.VK_DOWN:
-                bD = true;
-                break;
-        }
-    }
 
     public Rectangle getRect() {
         return new Rectangle(POS_X,POS_Y,ROUND,ROUND);

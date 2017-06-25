@@ -14,7 +14,7 @@ public class TankClient extends Frame{
     public static final int FRAME_Y = 100;
     private final int MAX_TANKS = 5;
 
-    private Tank myTank = new Tank(100,100,this, true);
+    private MyTank myTank = new MyTank(this);
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
     private ArrayList<Tank> tanks = new ArrayList<Tank>();
     Image offScreenImage = null;
