@@ -78,7 +78,6 @@ public class Bomb {
 
     public void isAlive() {
         hitTank();
-        hitWall();
         if (POS_X > Constants.FRAME_WIDTH || POS_X < 0
                 || POS_Y > Constants.FRAME_HEIGHT || POS_Y < 0) {
             alive = false;
@@ -103,12 +102,5 @@ public class Bomb {
         }
     }
 
-    public void hitWall() {
-        for (Wall w : tc.getWalls()) {
-            if (w.getRect().intersects(this.getRect())) {
-                this.alive = false;
-            }
-        }
-    }
 
 }

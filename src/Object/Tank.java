@@ -166,10 +166,6 @@ public class Tank{
         }
         POS_X = POS_X <= 0 ? 0 : POS_X >= Constants.FRAME_WIDTH - ROUND ? Constants.FRAME_WIDTH - ROUND: POS_X;
         POS_Y = POS_Y <= 23 ? 23 : POS_Y >= Constants.FRAME_HEIGHT - ROUND ? Constants.FRAME_HEIGHT - ROUND: POS_Y;
-        ArrayList<Wall> walls = tc.getWalls();
-        for (Wall w : walls) {
-            hitWall(w);
-        }
 
         ArrayList<Tank> tanks = tc.getTanks();
         for (Tank c : tanks) {
@@ -209,16 +205,6 @@ public class Tank{
         tc.getBombs().add(new Bomb(barrelDir,x,y,this.tc, bGood));
     }
 
-    public boolean hitWall(Wall w) {
-        if (this.getRect().intersects(w.getRect())) {
-            POS_X = oldX;
-            POS_Y = oldY;
-            dir = directions[r.nextInt(8)];
-
-            return true;
-        }
-        return false;
-    }
 
 
     public Rectangle getRect() {

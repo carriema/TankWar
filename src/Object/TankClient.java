@@ -19,7 +19,6 @@ public class TankClient extends Frame{
     private ArrayList<Tank> tanks = new ArrayList<Tank>();
     Image offScreenImage = null;
     private ArrayList<Explode> explodes = new ArrayList<Explode>();
-    private ArrayList<Wall> walls = new ArrayList<Wall>();
 
     public void generateTank(boolean bGood) {
         while (tanks.size() < MAX_TANKS) {
@@ -63,15 +62,10 @@ public class TankClient extends Frame{
         for (int i = 0; i < explodes.size(); i++) {
             explodes.get(i).draw(g);
         }
-        for (int i = 0; i < walls.size(); i++) {
-            walls.get(i).draw(g);
-        }
     }
 
     public void launchFrame() {
         tanks.add(myTank);
-        walls.add(new Wall(200, 200, 300, 20, this));
-        walls.add(new Wall(400, 100, 20, 350, this));
         this.setLocation(FRAME_X, FRAME_Y);
         this.setSize(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
         this.setResizable(false);
@@ -108,10 +102,6 @@ public class TankClient extends Frame{
                 }
             }
         }
-    }
-
-    public ArrayList<Wall> getWalls() {
-        return walls;
     }
 
     private class KeyMonitor extends KeyAdapter {
