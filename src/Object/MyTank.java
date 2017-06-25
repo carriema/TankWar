@@ -50,6 +50,9 @@ public class MyTank extends Tank {
     public void keyPressed(KeyEvent e) {
         int key =  e.getKeyCode();
         switch(key) {
+            case KeyEvent.VK_SHIFT:
+                this.alive = true;
+                break;
             case KeyEvent.VK_LEFT:
                 bL = true;
                 break;

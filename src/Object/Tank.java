@@ -36,8 +36,8 @@ public class Tank{
         POS_Y = r.nextInt(Constants.FRAME_HEIGHT - ROUND);
         this.tc = tc;
         this.bGood = bGood;
-        oldX = POS_X + 20;
-        oldY = POS_Y - 20;
+        oldX = POS_X + 200;
+        oldY = POS_Y - 200;
     }
 
     public Tank(int x, int y, TankClient tc, boolean bGood) {
@@ -98,18 +98,18 @@ public class Tank{
     }
 
     public void draw(Graphics g) {
-        Color c = g.getColor();
-        g.setColor(bGood? Color.RED : Color.LIGHT_GRAY);
-        move();
-        g.fillOval(POS_X, POS_Y,ROUND, ROUND);
-        drawBarrelPos(g);
-        g.setColor(c);
-
+        if (alive) {
+            Color c = g.getColor();
+            g.setColor(bGood? Color.RED : Color.LIGHT_GRAY);
+            move();
+            g.fillOval(POS_X, POS_Y,ROUND, ROUND);
+            drawBarrelPos(g);
+            g.setColor(c);
+        }
         if (!alive) {
-            if (this instanceof MyTank) {
-                g.drawString("Game Over", POS_X, POS_Y);
+            if (!(this instanceof MyTank)) {
+                tc.getTanks().remove(this);
             }
-            tc.getTanks().remove(this);
         }
     }
 
