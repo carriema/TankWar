@@ -17,6 +17,7 @@ public class Bomb {
     private int POS_Y;
     private int SPEED = 6;
     private boolean alive = true;
+    private boolean good;
 
     public Bomb(Direction d, int x, int y) {
         this.dir = d;
@@ -24,9 +25,10 @@ public class Bomb {
         POS_Y = y;
     }
 
-    public Bomb(Direction d, int x, int y, TankClient tc) {
+    public Bomb(Direction d, int x, int y, TankClient tc, boolean good) {
         this(d,x,y);
         this.tc = tc;
+        this.good = good;
     }
 
     public void move() {
@@ -68,7 +70,7 @@ public class Bomb {
 
     public void draw(Graphics g) {
         Color c = g.getColor();
-        g.setColor(Color.BLACK);
+        g.setColor(good ? Color.pink : Color.BLACK);
         g.fillOval(POS_X, POS_Y, ROUND, ROUND);
         g.setColor(c);
         move();
@@ -88,9 +90,16 @@ public class Bomb {
     }
 
     public void hitTank() {
+        if (!good && this.getRect().intersects(tc.getMyTank().getRect())) {
+            Tank myTank = tc.getMyTank();
+            myTank.setAlive(false);
+            this.alive = false;
+            tc.getExplodes().add(new Explode(myTank.getPosX(), myTank.getPosY(),this.tc));
+            return;
+        }
         ArrayList<Tank> tanks = tc.getTanks();
         for (int i = 0; i < tanks.size(); i++) {
-            if (this.getRect().intersects(tanks.get(i).getRect())) {
+            if (this.good != tanks.get(i).isGood() && this.getRect().intersects(tanks.get(i).getRect())) {
                 Tank hitTank = tanks.get(i);
                 hitTank.setAlive(false);
                 this.alive = false;

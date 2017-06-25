@@ -48,7 +48,5 @@ public class Explode {
         g.fillOval(x, y, round, round);
         g.setColor(c);
 
-
-
     }
 }

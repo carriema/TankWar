@@ -12,8 +12,8 @@ import java.util.Random;
  */
 public class Tank{
 
-    private int POS_X;
-    private int POS_Y;
+    protected int POS_X;
+    protected int POS_Y;
     private int SPEED = 3;
     protected final int ROUND = Constants.TANK_SIZE;
     protected Direction dir = Direction.STAY;
@@ -23,8 +23,9 @@ public class Tank{
     protected boolean bGood;
     protected boolean alive = true;
     private Random r = new Random();
-
-
+    private int step = 0;
+    private Direction[] directions = {Direction.D, Direction.L, Direction.LD, Direction.LU,Direction.R,
+            Direction.RD,Direction.RU,Direction.U};
 
 
     public Tank(TankClient tc, boolean bGood) {
@@ -40,6 +41,10 @@ public class Tank{
         this.POS_Y = y;
         this.tc = tc;
         this.bGood = bGood;
+    }
+
+    public boolean isGood() {
+        return bGood;
     }
 
     public void drawBarrelPos(Graphics g) {
@@ -87,12 +92,20 @@ public class Tank{
     }
 
     public void setDirection() {
-        Direction[] directions = {Direction.D, Direction.L, Direction.LD, Direction.LU,Direction.R,
-                Direction.RD,Direction.RU,Direction.STAY,Direction.U} ;
-        dir = directions[r.nextInt(directions.length)];
+        if (step == 0 || POS_X <= 0 || POS_X >= Constants.FRAME_WIDTH - ROUND
+                || POS_Y <= 23 || POS_Y >= Constants.FRAME_HEIGHT - ROUND) {
+            step = r.nextInt(10);
+            dir = directions[r.nextInt(directions.length)];
+        }
+
         if (dir != Direction.STAY) {
             barrelDir = dir;
         }
+
+        if (r.nextInt(40) > 35) {
+            fire();
+        }
+
     }
 
     public void move() {
@@ -157,12 +170,11 @@ public class Tank{
         this.alive = isAlive;
     }
 
-
-
     public void fire() {
+        if (!alive) return;
         int x = POS_X + ROUND/2;
         int y = POS_Y + ROUND/2;
-        tc.getBombs().add(new Bomb(barrelDir,x,y,this.tc));
+        tc.getBombs().add(new Bomb(barrelDir,x,y,this.tc, bGood));
     }
 
 

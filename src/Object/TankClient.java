@@ -65,6 +65,7 @@ public class TankClient extends Frame{
     }
 
     public void launchFrame() {
+        tanks.add(myTank);
         this.setLocation(FRAME_X, FRAME_Y);
         this.setSize(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
         this.setResizable(false);
@@ -113,6 +114,10 @@ public class TankClient extends Frame{
         public void keyPressed(KeyEvent e) {
             myTank.keyPressed(e);
         }
+    }
+
+    public Tank getMyTank() {
+        return myTank;
     }
 
 }

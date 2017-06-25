@@ -57,6 +57,13 @@ public class MyTank extends Tank {
         }
     }
 
+    @Override
+    public void fire() {
+        int x = POS_X + ROUND/2;
+        int y = POS_Y + ROUND/2;
+        tc.getBombs().add(new Bomb(barrelDir,x,y,this.tc, true));
+    }
+
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         switch(key) {
