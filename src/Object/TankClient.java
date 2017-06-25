@@ -12,19 +12,26 @@ public class TankClient extends Frame{
 
     public static final int FRAME_X = 100;
     public static final int FRAME_Y = 100;
+    private final int MAX_TANKS = 5;
 
     private Tank myTank = new Tank(100,100,this, true);
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
     private ArrayList<Tank> tanks = new ArrayList<Tank>();
     Image offScreenImage = null;
+    private ArrayList<Explode> explodes = new ArrayList<Explode>();
 
     public void generateTank(boolean bGood) {
-
-        tanks.add(new Tank(this, bGood));
+        while (tanks.size() < MAX_TANKS) {
+            tanks.add(new Tank(this, bGood));
+        }
     }
 
     public ArrayList getBombs() {
         return bombs;
+    }
+
+    public ArrayList getExplodes() {
+        return explodes;
     }
 
     public void update(Graphics g) {
@@ -42,6 +49,7 @@ public class TankClient extends Frame{
     }
 
     public void paint(Graphics g) {
+        generateTank(false);
         g.setColor(Color.black);
         g.drawString(String.valueOf(bombs.size()), 100, 100);
         myTank.draw(g);
@@ -50,6 +58,9 @@ public class TankClient extends Frame{
         }
         for (int i = 0; i < tanks.size(); i++) {
             tanks.get(i).draw(g);
+        }
+        for (int i = 0; i < explodes.size(); i++) {
+            explodes.get(i).draw(g);
         }
     }
 
@@ -64,7 +75,6 @@ public class TankClient extends Frame{
                 System.exit(0);
             }
         });
-        generateTank(false);
         this.setVisible(true);
         this.addKeyListener(new KeyMonitor());
 

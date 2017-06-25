@@ -82,13 +82,6 @@ public class Bomb {
         }
     }
 
-//    public void isAlive() {
-//        if (POS_X > Constants.FRAME_WIDTH || POS_X < 0
-//                || POS_Y > Constants.FRAME_HEIGHT || POS_Y < 0) {
-//            alive = false;
-//            tc.getBombs().remove(this);
-//        }
-//    }
 
     public Rectangle getRect() {
         return new Rectangle(POS_X,POS_Y,ROUND,ROUND);
@@ -98,8 +91,10 @@ public class Bomb {
         ArrayList<Tank> tanks = tc.getTanks();
         for (int i = 0; i < tanks.size(); i++) {
             if (this.getRect().intersects(tanks.get(i).getRect())) {
-                tanks.get(i).setAlive(false);
+                Tank hitTank = tanks.get(i);
+                hitTank.setAlive(false);
                 this.alive = false;
+                tc.getExplodes().add(new Explode(hitTank.getPosX(), hitTank.getPosY(),this.tc));
                 return;
             }
         }
