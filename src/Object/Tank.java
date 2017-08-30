@@ -13,6 +13,7 @@ import java.util.Random;
  */
 public class Tank{
 
+	public int id;
     protected int POS_X;
     protected int POS_Y;
     protected int oldX;

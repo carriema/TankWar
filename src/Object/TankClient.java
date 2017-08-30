@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+import Net.NetClient;
+import Net.NetServer;
+
 /**
  * Created by myr on 6/21/16.
  */
@@ -14,17 +17,18 @@ public class TankClient extends Frame{
     public static final int FRAME_Y = 100;
     private final int MAX_TANKS = 6;
 
-    private MyTank myTank = new MyTank(this);
+    public MyTank myTank = new MyTank(this);
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
     private ArrayList<Tank> tanks = new ArrayList<Tank>();
     Image offScreenImage = null;
     private ArrayList<Explode> explodes = new ArrayList<Explode>();
+    private NetClient nc = new NetClient(this);
 
-    public void generateTank(boolean bGood) {
-        while (tanks.size() < MAX_TANKS) {
-            tanks.add(new Tank(this, bGood));
-        }
-    }
+//    public void generateTank(boolean bGood) {
+//        while (tanks.size() < MAX_TANKS) {
+//            tanks.add(new Tank(this, bGood));
+//        }
+//    }
 
     public ArrayList getBombs() {
         return bombs;
@@ -49,9 +53,9 @@ public class TankClient extends Frame{
     }
 
     public void paint(Graphics g) {
-        generateTank(false);
         g.setColor(Color.black);
         g.drawString(String.valueOf(bombs.size()), 100, 100);
+        g.drawString(String.valueOf(myTank.id), myTank.POS_X, myTank.POS_Y);
 //        myTank.draw(g);
         for (int i = 0; i < bombs.size(); i++) {
             bombs.get(i).draw(g);
@@ -80,6 +84,7 @@ public class TankClient extends Frame{
         this.addKeyListener(new KeyMonitor());
 
         new Thread(new PaintThread()).start();
+        nc.connect("127.0.0.1", NetServer.TCP_PORT);
     }
 
     public static void main(String[] args) {
