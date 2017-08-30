@@ -40,6 +40,10 @@ public class Tank{
         oldX = POS_X + 200;
         oldY = POS_Y - 200;
     }
+    
+    public Direction getDir() {
+    	return this.dir;
+    }
 
     public Tank(int x, int y, TankClient tc, boolean bGood) {
         this.POS_X = x;

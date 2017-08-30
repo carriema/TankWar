@@ -84,6 +84,7 @@ public class TankClient extends Frame{
         this.addKeyListener(new KeyMonitor());
 
         new Thread(new PaintThread()).start();
+        
         nc.connect("127.0.0.1", NetServer.TCP_PORT);
     }
 
