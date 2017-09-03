@@ -23,7 +23,7 @@ public class Tank{
     protected Direction dir = Direction.STAY;
     protected Direction barrelDir = Direction.U;
     protected final int barrelLength = 20;
-    TankClient tc;
+    TankClient tc = TankClient.getInstance();
     protected boolean bGood;
     protected boolean alive = true;
     private Random r = new Random();
@@ -31,30 +31,31 @@ public class Tank{
     private Direction[] directions = {Direction.D, Direction.L, Direction.LD, Direction.LU,Direction.R,
             Direction.RD,Direction.RU,Direction.U};
 
+    
+    public Tank(int id, int x, int y, boolean isGood, Direction dir) {
+    	// TODO Auto-generated constructor stub
+    	this.POS_X = x;
+        this.POS_Y = y;
+    	this.bGood = isGood;
+    	this.dir = dir;
+    }
 
-    public Tank(TankClient tc, boolean bGood) {
+	public Tank() {
+		// TODO Auto-generated constructor stub
         POS_X = r.nextInt(Constants.FRAME_WIDTH - ROUND);
         POS_Y = r.nextInt(Constants.FRAME_HEIGHT - ROUND);
-        this.tc = tc;
-        this.bGood = bGood;
-        oldX = POS_X + 200;
-        oldY = POS_Y - 200;
-    }
-    
-    public Direction getDir() {
+        this.bGood = id % 2 == 0;
+	}
+
+	public Direction getDir() {
     	return this.dir;
     }
-
-    public Tank(int x, int y, TankClient tc, boolean bGood) {
-        this.POS_X = x;
-        this.POS_Y = y;
-        this.tc = tc;
-        this.bGood = bGood;
-        oldX = POS_X;
-        oldY = POS_Y;
+    
+    public void setDirection(Direction d) {
+    	this.dir = d;
     }
-
-    public boolean hitTank(Tank b) {
+    
+	public boolean hitTank(Tank b) {
         if (!this.equals(b) && this.getRect().intersects(b.getRect())) {
             POS_X = oldX;
             POS_Y = oldY;
@@ -106,7 +107,7 @@ public class Tank{
         if (alive) {
             Color c = g.getColor();
             g.setColor(bGood? Color.RED : Color.LIGHT_GRAY);
-            move();
+//            move();
             g.fillOval(POS_X, POS_Y,ROUND, ROUND);
             drawBarrelPos(g);
             g.setColor(c);
@@ -118,65 +119,65 @@ public class Tank{
         }
     }
 
-    public void setDirection() {
-        if (step == 0 || POS_X <= 0 || POS_X >= Constants.FRAME_WIDTH - ROUND
-                || POS_Y <= 23 || POS_Y >= Constants.FRAME_HEIGHT - ROUND) {
-            step = r.nextInt(10);
-            dir = directions[r.nextInt(directions.length)];
-        }
+//    public void setDirection() {
+//        if (step == 0 || POS_X <= 0 || POS_X >= Constants.FRAME_WIDTH - ROUND
+//                || POS_Y <= 23 || POS_Y >= Constants.FRAME_HEIGHT - ROUND) {
+//            step = r.nextInt(10);
+//            dir = directions[r.nextInt(directions.length)];
+//        }
+//
+//        if (dir != Direction.STAY) {
+//            barrelDir = dir;
+//        }
+//
+//        if (r.nextInt(40) > 35) {
+//            fire();
+//        }
+//    }
 
-        if (dir != Direction.STAY) {
-            barrelDir = dir;
-        }
-
-        if (r.nextInt(40) > 35) {
-            fire();
-        }
-    }
-
-    public void move() {
-        oldX = POS_X;
-        oldY = POS_Y;
-        setDirection();
-        switch(dir) {
-            case D:
-                POS_Y += SPEED;
-                break;
-            case U:
-                POS_Y -= SPEED;
-                break;
-            case L:
-                POS_X -= SPEED;
-                break;
-            case R:
-                POS_X += SPEED;
-                break;
-            case LU:
-                POS_X -= SPEED;
-                POS_Y -= SPEED;
-                break;
-            case RU:
-                POS_X += SPEED;
-                POS_Y -= SPEED;
-                break;
-            case LD:
-                POS_X -= SPEED;
-                POS_Y += SPEED;
-                break;
-            case RD:
-                POS_X += SPEED;
-                POS_Y += SPEED;
-                break;
-
-        }
-        POS_X = POS_X <= 0 ? 0 : POS_X >= Constants.FRAME_WIDTH - ROUND ? Constants.FRAME_WIDTH - ROUND: POS_X;
-        POS_Y = POS_Y <= 23 ? 23 : POS_Y >= Constants.FRAME_HEIGHT - ROUND ? Constants.FRAME_HEIGHT - ROUND: POS_Y;
-
-        ArrayList<Tank> tanks = tc.getTanks();
-        for (Tank c : tanks) {
-            this.hitTank(c);
-        }
-    }
+//    public void move() {
+//        oldX = POS_X;
+//        oldY = POS_Y;
+//        setDirection();
+//        switch(dir) {
+//            case D:
+//                POS_Y += SPEED;
+//                break;
+//            case U:
+//                POS_Y -= SPEED;
+//                break;
+//            case L:
+//                POS_X -= SPEED;
+//                break;
+//            case R:
+//                POS_X += SPEED;
+//                break;
+//            case LU:
+//                POS_X -= SPEED;
+//                POS_Y -= SPEED;
+//                break;
+//            case RU:
+//                POS_X += SPEED;
+//                POS_Y -= SPEED;
+//                break;
+//            case LD:
+//                POS_X -= SPEED;
+//                POS_Y += SPEED;
+//                break;
+//            case RD:
+//                POS_X += SPEED;
+//                POS_Y += SPEED;
+//                break;
+//
+//        }
+//        POS_X = POS_X <= 0 ? 0 : POS_X >= Constants.FRAME_WIDTH - ROUND ? Constants.FRAME_WIDTH - ROUND: POS_X;
+//        POS_Y = POS_Y <= 23 ? 23 : POS_Y >= Constants.FRAME_HEIGHT - ROUND ? Constants.FRAME_HEIGHT - ROUND: POS_Y;
+//
+//        ArrayList<Tank> tanks = tc.getTanks();
+//        for (Tank c : tanks) {
+//            this.hitTank(c);
+//        }
+//    }
 
     public int getRound() {
         return ROUND;
@@ -207,10 +208,12 @@ public class Tank{
         if (!alive) return;
         int x = POS_X + ROUND/2;
         int y = POS_Y + ROUND/2;
-        tc.getBombs().add(new Bomb(barrelDir,x,y,this.tc, bGood));
+        tc.getBombs().add(new Bomb(barrelDir,x,y, bGood));
     }
 
-
+    public void setGood(boolean isGood) {
+    	this.bGood = isGood;
+    }
 
     public Rectangle getRect() {
         return new Rectangle(POS_X,POS_Y,ROUND,ROUND);

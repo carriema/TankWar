@@ -25,9 +25,9 @@ public class Bomb {
         POS_Y = y;
     }
 
-    public Bomb(Direction d, int x, int y, TankClient tc, boolean good) {
+    public Bomb(Direction d, int x, int y, boolean good) {
         this(d,x,y);
-        this.tc = tc;
+        this.tc = TankClient.getInstance();
         this.good = good;
     }
 

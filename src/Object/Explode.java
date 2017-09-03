@@ -16,10 +16,10 @@ public class Explode {
     private boolean increase = true;
     private TankClient tc;
 
-    public Explode(int x, int y, TankClient tc) {
+    public Explode(int x, int y) {
         this.x = x;
         this.y = y;
-        this.tc = tc;
+        this.tc = TankClient.getInstance();
     }
 
     public void roundChange() {

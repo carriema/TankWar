@@ -7,14 +7,14 @@ import java.util.ArrayList;
  * Created by myr on 6/24/17.
  */
 public class MyTank extends Tank {
+	
+    public MyTank() {
+		// TODO Auto-generated constructor stub
+    	super();
+	}
 
-    boolean bL = false, bU = false, bR = false, bD = false;
+	boolean bL = false, bU = false, bR = false, bD = false;
 
-    public MyTank(TankClient tc) {
-        super(tc, true);
-    }
-
-    @Override
     public void setDirection() {
         if (bL == true && bU == false && bR == false && bD == false) {
             dir = Direction.L;
@@ -72,7 +72,7 @@ public class MyTank extends Tank {
     public void fire() {
         int x = POS_X + ROUND/2;
         int y = POS_Y + ROUND/2;
-        tc.getBombs().add(new Bomb(barrelDir,x,y,this.tc, true));
+        tc.getBombs().add(new Bomb(barrelDir,x,y, true));
     }
 
     public void keyReleased(KeyEvent e) {
