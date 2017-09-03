@@ -4,6 +4,7 @@ import Utils.Constants;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Created by myr on 6/23/17.
@@ -90,13 +91,13 @@ public class Bomb {
     }
 
     public void hitTank() {
-        ArrayList<Tank> tanks = tc.getTanks();
+        ArrayList<Tank> tanks = (ArrayList<Tank>)tc.getTanks().values();
         for (int i = 0; i < tanks.size(); i++) {
             if (this.good != tanks.get(i).isGood() && this.getRect().intersects(tanks.get(i).getRect())) {
                 Tank hitTank = tanks.get(i);
                 hitTank.setAlive(false);
                 this.alive = false;
-                tc.getExplodes().add(new Explode(hitTank.getPosX(), hitTank.getPosY(),this.tc));
+                tc.getExplodes().add(new Explode(hitTank.getPosX(), hitTank.getPosY()));
                 return;
             }
         }

@@ -18,12 +18,6 @@ public class NetServer {
 	List<Client> clients = new ArrayList<>();
 	public int ID = 100;
 	public static final int UDP_PORT = 8544;
-	public static int client_udp = 7677;
-	
-	public synchronized static int getUDPPort() {
-		client_udp+=1;
-		return client_udp;
-	}
 	
 
 	public void start() {

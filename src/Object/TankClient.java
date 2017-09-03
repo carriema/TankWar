@@ -5,6 +5,7 @@ import Utils.Constants;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Net.NetClient;
 import Net.NetServer;
@@ -16,21 +17,16 @@ public class TankClient extends Frame {
 
 	public static final int FRAME_X = 100;
 	public static final int FRAME_Y = 100;
-	private final int MAX_TANKS = 6;
 	public final static TankClient tc = new TankClient();
 
 	public MyTank myTank = new MyTank();
 	private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
-	private ArrayList<Tank> tanks = new ArrayList<Tank>();
+	private HashMap<Integer, Tank> tanks = new HashMap<Integer, Tank>();
 	Image offScreenImage = null;
 	private ArrayList<Explode> explodes = new ArrayList<Explode>();
 	private NetClient nc = new NetClient(this);
 
-	// public void generateTank(boolean bGood) {
-	// while (tanks.size() < MAX_TANKS) {
-	// tanks.add(new Tank(this, bGood));
-	// }
-	// }
+	
 
 	public ArrayList getBombs() {
 		return bombs;
@@ -62,8 +58,8 @@ public class TankClient extends Frame {
 		for (int i = 0; i < bombs.size(); i++) {
 			bombs.get(i).draw(g);
 		}
-		for (int i = 0; i < tanks.size(); i++) {
-			tanks.get(i).draw(g);
+		for (Tank k : tanks.values()) {
+			k.draw(g);
 		}
 		for (int i = 0; i < explodes.size(); i++) {
 			explodes.get(i).draw(g);
@@ -71,7 +67,7 @@ public class TankClient extends Frame {
 	}
 
 	public void launchFrame() {
-		tanks.add(myTank);
+		
 		this.setLocation(FRAME_X, FRAME_Y);
 		this.setSize(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
 		this.setResizable(false);
@@ -94,12 +90,12 @@ public class TankClient extends Frame {
 		tc.launchFrame();
 	}
 
-	public ArrayList getTanks() {
+	public HashMap<Integer, Tank> getTanks() {
 		return tanks;
 	}
 	
 	public void addTanks(Tank t) {
-		tanks.add(t);
+		tanks.put(t.id, t);
 	}
 
 	private class PaintThread implements Runnable {

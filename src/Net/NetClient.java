@@ -8,22 +8,23 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Random;
 
-import Message.TankInitMsg;
+import Message.TankStateChangeMsg;
 import Object.TankClient;
 
 public class NetClient {
 
-	public static int UDP_START_PORT = 2225;
 	public int udpPort;
 	public TankClient tc;
 	public DatagramSocket socket;
 	private byte[] buf;
+	private Random random = new Random();
 
 	public NetClient(TankClient tc) {
 		this.tc = tc;
-//		udpPort = UDP_START_PORT++;
-		udpPort = NetServer.getUDPPort();
+		udpPort = random.nextInt(60000);
+//		udpPort = NetServer.getUDPPort();
 		System.out.println("udpPort: " + udpPort);
 		try {
 			socket = new DatagramSocket(udpPort);
@@ -46,6 +47,8 @@ public class NetClient {
 			boolean isGood = dis.readBoolean();
 			tc.myTank.id = id;
 			tc.myTank.setGood(isGood);
+			System.out.println("NetClient.connect.myTankId: " + tc.myTank.id);
+			tc.addTanks(tc.myTank);
 			System.out.println("Get tank Id " + id);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -60,8 +63,7 @@ public class NetClient {
 				e.printStackTrace();
 			}
 		}
-		TankInitMsg initMsg = new TankInitMsg(tc.myTank);
-		sendMsg(initMsg.getMsg("127.0.0.1", NetServer.UDP_PORT));
+		new Thread(new UDPSender()).start();
 		new Thread(new UDPReceiver()).start();
 
 	}
@@ -77,6 +79,7 @@ public class NetClient {
 
 	private class UDPReceiver implements Runnable {
 		private byte[] buff = new byte[1024];
+		TankStateChangeMsg msg = new TankStateChangeMsg(tc.myTank);
 
 		@Override
 		public void run() {
@@ -98,9 +101,27 @@ public class NetClient {
 		public void parse(DatagramPacket dp) {
 			ByteArrayInputStream bs = new ByteArrayInputStream(dp.getData());
 			DataInputStream dis = new DataInputStream(bs);
-			TankInitMsg.parse(dis);
+			msg.parse(dis);
 		}
 
 	}
 
+	private class UDPSender implements Runnable {
+
+		TankStateChangeMsg tankStateChange = new TankStateChangeMsg(tc.myTank);
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			while (true) {
+				sendMsg(tankStateChange.getMsg("127.0.0.1", NetServer.UDP_PORT));
+				try {
+					Thread.sleep(15000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
 }

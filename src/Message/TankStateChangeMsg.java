@@ -11,10 +11,10 @@ import Object.Direction;
 import Object.Tank;
 import Object.TankClient;
 
-public class TankInitMsg {
+public class TankStateChangeMsg {
 	Tank t;
 
-	public TankInitMsg(Tank t) {
+	public TankStateChangeMsg(Tank t) {
 		this.t = t;
 	}
 
@@ -33,13 +33,14 @@ public class TankInitMsg {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(t.id);
 		byte[] buf = baos.toByteArray();
 		DatagramPacket dp = new DatagramPacket(buf, buf.length, new InetSocketAddress(IP, udpPort));
 		return dp;
 
 	}
-
-	public static void parse(DataInputStream dis) {
+	
+	public void parse(DataInputStream dis) {
 		int id, posX, posY, dir;
 		boolean isGood;
 		try {
@@ -49,7 +50,19 @@ public class TankInitMsg {
 			isGood = dis.readBoolean();
 			dir = dis.readInt();
 			TankClient tc = TankClient.getInstance();
-			tc.addTanks(new Tank(id, posX, posY, isGood, Direction.values()[dir]));
+			System.out.println("getBy- " + id);
+			if (!tc.getTanks().containsKey(id)) {
+				Tank tank = new Tank(id, posX, posY, isGood, Direction.values()[dir]);
+				tc.addTanks(tank);
+				System.out.println("TankStateChange.parse.addTankId: " + tank.id);;
+				tc.getTanks().forEach((k,v)->{System.out.println("id: " + k + ", TankId: " +v.id);});
+			} else {
+				Tank tank = (Tank) tc.getTanks().get(id);
+				tank.setPosX(posX);
+				tank.setPosY(posY);
+				tank.setDirection(Direction.values()[dir]);
+			}
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,5 +70,4 @@ public class TankInitMsg {
 		
 
 	}
-
 }
