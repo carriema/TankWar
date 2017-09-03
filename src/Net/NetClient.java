@@ -8,6 +8,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Random;
 
 import Message.TankInitMsg;
 import Object.TankClient;
@@ -19,11 +20,12 @@ public class NetClient {
 	public TankClient tc;
 	public DatagramSocket socket;
 	private byte[] buf;
+	private Random random = new Random();
 
 	public NetClient(TankClient tc) {
 		this.tc = tc;
 //		udpPort = UDP_START_PORT++;
-		udpPort = NetServer.getUDPPort();
+		udpPort = random.nextInt(60000);
 		System.out.println("udpPort: " + udpPort);
 		try {
 			socket = new DatagramSocket(udpPort);
