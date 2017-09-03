@@ -38,6 +38,7 @@ public class Tank{
         this.POS_Y = y;
     	this.bGood = isGood;
     	this.dir = dir;
+    	this.id = id;
     }
 
 	public Tank() {
@@ -114,7 +115,7 @@ public class Tank{
         }
         if (!alive) {
             if (!(this instanceof MyTank)) {
-                tc.getTanks().remove(this);
+                tc.getTanks().remove(this.id);
             }
         }
     }
