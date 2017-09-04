@@ -21,7 +21,7 @@ public class Tank{
     protected final int barrelLength = 20;
     protected TankClient tc;
     protected boolean bGood;
-    protected boolean alive = true;
+    public boolean alive = true;
     private Random r = new Random();
    
 

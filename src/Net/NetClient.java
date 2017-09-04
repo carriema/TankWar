@@ -107,7 +107,7 @@ public class NetClient {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			while (true) {
+			while (tc.myTank.alive) {
 				sendMsg(tankStateChange.generateMsg());
 				try {
 					Thread.sleep(1500);
