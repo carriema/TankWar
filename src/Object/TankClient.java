@@ -6,7 +6,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import Message.TankDeadMsg;
 import Net.NetClient;
 import Net.NetServer;
 
@@ -23,16 +27,14 @@ public class TankClient extends Frame {
 	private HashMap<Integer, Bomb> bombs;
 	private HashMap<Integer, Tank> tanks;
 	Image offScreenImage = null;
-	private HashMap<Integer, Explode> explodes;
+	private ArrayList<Explode> explodes;
 	private NetClient nc;
-
-	
 
 	public HashMap<Integer, Bomb> getBombs() {
 		return bombs;
 	}
 
-	public HashMap<Integer, Explode> getExplodes() {
+	public ArrayList<Explode> getExplodes() {
 		return explodes;
 	}
 
@@ -55,23 +57,50 @@ public class TankClient extends Frame {
 		g.drawString(String.valueOf(bombs.size()), 100, 100);
 		g.drawString(String.valueOf(myTank.id), myTank.POS_X, myTank.POS_Y);
 		// myTank.draw(g);
-		for (Bomb b : bombs.values()) {
-			b.draw(g);
+		synchronized (bombs) {
+			for (Iterator<Entry<Integer, Bomb>> it = bombs.entrySet().iterator(); it.hasNext();) {
+				Entry<Integer, Bomb> entry = it.next();
+				if (!entry.getValue().alive()) {
+					it.remove();
+				} else {
+					entry.getValue().draw(g);
+				}
+			}
 		}
-		for (Tank k : tanks.values()) {
-			k.draw(g);
+
+		synchronized (tanks) {
+			for (Iterator<Entry<Integer, Tank>> it = tanks.entrySet().iterator(); it.hasNext();) {
+				Entry<Integer, Tank> entry = it.next();
+				if (!entry.getValue().alive) {
+					
+					it.remove();
+					
+				} else {
+					entry.getValue().draw(g);
+				}
+			}
 		}
-		for (Explode e : explodes.values()) {
-			e.draw(g);
+		synchronized (explodes) {
+			Iterator<Explode> i = explodes.iterator();
+			while (i.hasNext()) {
+				Explode e = i.next();
+				if (!e.isExst()) {
+					i.remove();
+				} else {
+					e.draw(g);
+				}
+
+			}
 		}
+
 	}
 
 	public void launchFrame() {
-		
+
 		this.myTank = new MyTank();
 		this.bombs = new HashMap<Integer, Bomb>();
 		this.tanks = new HashMap<Integer, Tank>();
-		this.explodes = new HashMap<Integer, Explode>();
+		this.explodes = new ArrayList<>();
 		this.nc = new NetClient();
 		this.setLocation(FRAME_X, FRAME_Y);
 		this.setSize(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
@@ -92,14 +121,14 @@ public class TankClient extends Frame {
 	}
 
 	public static void main(String[] args) {
-		
+
 		tc.launchFrame();
 	}
 
 	public HashMap<Integer, Tank> getTanks() {
 		return tanks;
 	}
-	
+
 	public void addTanks(Tank t) {
 		tanks.put(t.id, t);
 	}
@@ -116,7 +145,6 @@ public class TankClient extends Frame {
 			}
 		}
 	}
-	
 
 	private class KeyMonitor extends KeyAdapter {
 

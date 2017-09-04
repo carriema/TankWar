@@ -6,6 +6,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Set;
 
+import Message.BombDeadMsg;
+import Message.TankDeadMsg;
+
 /**
  * Created by myr on 6/23/17.
  */
@@ -91,8 +94,14 @@ public class Bomb {
 		}
 		isAlive();
 		if (!alive) {
-			tc.getBombs().remove(this);
+			
+			new BombDeadMsg(this).generateMsg();
 		}
+		
+	}
+	
+	public boolean alive() {
+		return alive;
 	}
 
 	public void draw(Graphics g) {
@@ -101,6 +110,10 @@ public class Bomb {
 		g.fillOval(POS_X, POS_Y, ROUND, ROUND);
 		g.setColor(c);
 		move();
+	}
+	
+	public void setAlive(boolean isAlive) {
+		this.alive = isAlive;
 	}
 
 	public void isAlive() {
@@ -120,8 +133,11 @@ public class Bomb {
 				Tank hitTank = t;
 				hitTank.setAlive(false);
 				this.alive = false;
-				Explode ex = new Explode(this.id, hitTank.getPosX(), hitTank.getPosY());
-				tc.getExplodes().put(this.id, ex);
+				if (t instanceof MyTank) {
+					new TankDeadMsg(t).generateMsg();
+				}
+				new BombDeadMsg(this).generateMsg();
+				tc.getExplodes().add(new Explode(hitTank.getPosX(), hitTank.getPosY()));
 				return;
 			}
 		}

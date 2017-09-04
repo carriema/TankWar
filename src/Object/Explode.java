@@ -18,11 +18,10 @@ public class Explode {
     private TankClient tc = TankClient.getInstance();
 
    
-	public Explode(int id, int posX, int posY) {
+	public Explode(int posX, int posY) {
 		// TODO Auto-generated constructor stub
 		this.x = posX;
         this.y = posY;
-        this.id = id;
 	}
 
 	public void roundChange() {
@@ -39,13 +38,13 @@ public class Explode {
             round -= 20;
         }
     }
+	
+	public boolean isExst() {
+		return exist;
+	}
 
     public void draw(Graphics g) {
         roundChange();
-        if (!exist) {
-            tc.getExplodes().remove(this);
-            return;
-        }
         Color c = g.getColor();
         g.setColor(Color.ORANGE);
         g.fillOval(x, y, round, round);

@@ -80,7 +80,7 @@ public class NetClient {
 
 	private class UDPReceiver implements Runnable {
 		private byte[] buff = new byte[1024];
-		
+
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -89,7 +89,7 @@ public class NetClient {
 				try {
 					socket.receive(dp);
 					System.out.println("client side receive");
-					parse(dp);
+					MsgFactory.parse(dp);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -98,25 +98,12 @@ public class NetClient {
 
 		}
 
-		public void parse(DatagramPacket dp) {
-			DataInputStream dis = new DataInputStream(new ByteArrayInputStream(dp.getData()));
-			int type;
-			try {
-				type = dis.readInt();
-				MsgFactory.parse(MessageType.values()[type], dis);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-
 	}
 
 	private class UDPSender implements Runnable {
 
 		TankStateChangeMsg tankStateChange = new TankStateChangeMsg(tc.myTank);
-		
+
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -130,6 +117,6 @@ public class NetClient {
 				}
 			}
 		}
-		
+
 	}
 }

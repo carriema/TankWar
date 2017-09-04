@@ -25,6 +25,9 @@ public class Tank{
     private Random r = new Random();
    
 
+    public int getId() {
+    	return this.id;
+    }
     
     public Tank(int id, int x, int y, boolean isGood, Direction dir) {
     	// TODO Auto-generated constructor stub
@@ -99,11 +102,6 @@ public class Tank{
             g.fillOval(POS_X, POS_Y,ROUND, ROUND);
             drawBarrelPos(g);
             g.setColor(c);
-        }
-        if (!alive) {
-            if (!(this instanceof MyTank)) {
-                tc.getTanks().remove(this.id);
-            }
         }
     }
 
