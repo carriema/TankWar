@@ -15,6 +15,7 @@ import java.util.List;
 
 public class NetServer {
 	public static int TCP_PORT = 9090;
+	public static String IP_ADDRESS = "127.0.0.1";
 	List<Client> clients = new ArrayList<>();
 	public int ID = 100;
 	public static final int UDP_PORT = 8544;

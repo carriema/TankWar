@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import Message.BombStateChangeMsg;
 import Message.TankStateChangeMsg;
 import Net.NetClient;
 import Net.NetServer;
@@ -73,7 +74,7 @@ public class MyTank extends Tank {
 		POS_Y = POS_Y <= 23 ? 23 : POS_Y >= Constants.FRAME_HEIGHT - ROUND ? Constants.FRAME_HEIGHT - ROUND : POS_Y;
 		TankStateChangeMsg tscm = new TankStateChangeMsg(this);
 		try {
-			ds.send(tscm.getMsg("127.0.0.1", NetServer.UDP_PORT));
+			ds.send(tscm.generateMsg());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,11 +103,19 @@ public class MyTank extends Tank {
 		setDirection();
 	}
 
-	@Override
 	public void fire() {
 		int x = POS_X + ROUND / 2;
 		int y = POS_Y + ROUND / 2;
-		tc.getBombs().add(new Bomb(barrelDir, x, y, true));
+		Bomb b = new Bomb(barrelDir, x, y, this.bGood);
+		tc.getBombs().put(b.getId(), b);
+		BombStateChangeMsg msg = new BombStateChangeMsg(b);
+		try {
+			ds.send(msg.generateMsg());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void keyReleased(KeyEvent e) {

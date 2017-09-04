@@ -9,20 +9,23 @@ public class Explode {
 
     private int x;
     private int y;
+    public int id;
     private int round = 50;
     private final int SMAL_ROUND = 20;
     private final int LARGE_ROUND = 80;
     private boolean exist = true;
     private boolean increase = true;
-    private TankClient tc;
+    private TankClient tc = TankClient.getInstance();
 
-    public Explode(int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.tc = TankClient.getInstance();
-    }
+   
+	public Explode(int id, int posX, int posY) {
+		// TODO Auto-generated constructor stub
+		this.x = posX;
+        this.y = posY;
+        this.id = id;
+	}
 
-    public void roundChange() {
+	public void roundChange() {
         if (round > LARGE_ROUND) {
             increase = false;
         }

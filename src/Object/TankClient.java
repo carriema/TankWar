@@ -20,19 +20,19 @@ public class TankClient extends Frame {
 	public static final TankClient tc = new TankClient();
 
 	public MyTank myTank;
-	private ArrayList<Bomb> bombs;
+	private HashMap<Integer, Bomb> bombs;
 	private HashMap<Integer, Tank> tanks;
 	Image offScreenImage = null;
-	private ArrayList<Explode> explodes;
+	private HashMap<Integer, Explode> explodes;
 	private NetClient nc;
 
 	
 
-	public ArrayList getBombs() {
+	public HashMap<Integer, Bomb> getBombs() {
 		return bombs;
 	}
 
-	public ArrayList getExplodes() {
+	public HashMap<Integer, Explode> getExplodes() {
 		return explodes;
 	}
 
@@ -55,23 +55,23 @@ public class TankClient extends Frame {
 		g.drawString(String.valueOf(bombs.size()), 100, 100);
 		g.drawString(String.valueOf(myTank.id), myTank.POS_X, myTank.POS_Y);
 		// myTank.draw(g);
-		for (int i = 0; i < bombs.size(); i++) {
-			bombs.get(i).draw(g);
+		for (Bomb b : bombs.values()) {
+			b.draw(g);
 		}
 		for (Tank k : tanks.values()) {
 			k.draw(g);
 		}
-		for (int i = 0; i < explodes.size(); i++) {
-			explodes.get(i).draw(g);
+		for (Explode e : explodes.values()) {
+			e.draw(g);
 		}
 	}
 
 	public void launchFrame() {
 		
 		this.myTank = new MyTank();
-		this.bombs = new ArrayList<Bomb>();
+		this.bombs = new HashMap<Integer, Bomb>();
 		this.tanks = new HashMap<Integer, Tank>();
-		this.explodes = new ArrayList<Explode>();
+		this.explodes = new HashMap<Integer, Explode>();
 		this.nc = new NetClient();
 		this.setLocation(FRAME_X, FRAME_Y);
 		this.setSize(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);

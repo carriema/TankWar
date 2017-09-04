@@ -10,6 +10,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Random;
 
+import Message.BaseMsg;
+import Message.MessageType;
+import Message.MsgFactory;
 import Message.TankStateChangeMsg;
 import Object.TankClient;
 
@@ -77,8 +80,7 @@ public class NetClient {
 
 	private class UDPReceiver implements Runnable {
 		private byte[] buff = new byte[1024];
-		TankStateChangeMsg msg = new TankStateChangeMsg(tc.myTank);
-
+		
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -97,9 +99,16 @@ public class NetClient {
 		}
 
 		public void parse(DatagramPacket dp) {
-			ByteArrayInputStream bs = new ByteArrayInputStream(dp.getData());
-			DataInputStream dis = new DataInputStream(bs);
-			msg.parse(dis);
+			DataInputStream dis = new DataInputStream(new ByteArrayInputStream(dp.getData()));
+			int type;
+			try {
+				type = dis.readInt();
+				MsgFactory.parse(MessageType.values()[type], dis);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 
 	}
@@ -107,11 +116,12 @@ public class NetClient {
 	private class UDPSender implements Runnable {
 
 		TankStateChangeMsg tankStateChange = new TankStateChangeMsg(tc.myTank);
+		
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			while (true) {
-				sendMsg(tankStateChange.getMsg("127.0.0.1", NetServer.UDP_PORT));
+				sendMsg(tankStateChange.generateMsg());
 				try {
 					Thread.sleep(1500);
 				} catch (InterruptedException e) {

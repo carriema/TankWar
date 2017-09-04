@@ -166,13 +166,6 @@ public class Tank{
         this.alive = isAlive;
     }
 
-    public void fire() {
-        if (!alive) return;
-        int x = POS_X + ROUND/2;
-        int y = POS_Y + ROUND/2;
-        tc.getBombs().add(new Bomb(barrelDir,x,y, bGood));
-    }
-
     public void setGood(boolean isGood) {
     	this.bGood = isGood;
     }
