@@ -18,11 +18,10 @@ public class NetClient {
 	public int udpPort;
 	public TankClient tc;
 	public DatagramSocket socket;
-	private byte[] buf;
 	private Random random = new Random();
 
-	public NetClient(TankClient tc) {
-		this.tc = tc;
+	public NetClient() {
+		this.tc = TankClient.getInstance();
 		udpPort = random.nextInt(60000);
 		System.out.println("udpPort: " + udpPort);
 		try {
@@ -114,7 +113,7 @@ public class NetClient {
 			while (true) {
 				sendMsg(tankStateChange.getMsg("127.0.0.1", NetServer.UDP_PORT));
 				try {
-					Thread.sleep(15000);
+					Thread.sleep(1500);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

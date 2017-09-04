@@ -61,6 +61,7 @@ public class TankStateChangeMsg {
 				tank.setPosX(posX);
 				tank.setPosY(posY);
 				tank.setDirection(Direction.values()[dir]);
+				System.out.println("StateChange - " + Direction.values()[dir]);
 			}
 			
 		} catch (IOException e) {

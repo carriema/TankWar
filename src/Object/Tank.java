@@ -3,8 +3,6 @@ package Object;
 import Utils.Constants;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -16,20 +14,16 @@ public class Tank{
 	public int id;
     protected int POS_X;
     protected int POS_Y;
-    protected int oldX;
-    protected int oldY;
     private int SPEED = 3;
     protected final int ROUND = Constants.TANK_SIZE;
     protected Direction dir = Direction.STAY;
     protected Direction barrelDir = Direction.U;
     protected final int barrelLength = 20;
-    TankClient tc = TankClient.getInstance();
+    protected TankClient tc;
     protected boolean bGood;
     protected boolean alive = true;
     private Random r = new Random();
-    private int step = 0;
-    private Direction[] directions = {Direction.D, Direction.L, Direction.LD, Direction.LU,Direction.R,
-            Direction.RD,Direction.RU,Direction.U};
+   
 
     
     public Tank(int id, int x, int y, boolean isGood, Direction dir) {
@@ -39,13 +33,15 @@ public class Tank{
     	this.bGood = isGood;
     	this.dir = dir;
     	this.id = id;
+    	this.tc = TankClient.getInstance();
     }
 
 	public Tank() {
 		// TODO Auto-generated constructor stub
         POS_X = r.nextInt(Constants.FRAME_WIDTH - ROUND);
-        POS_Y = r.nextInt(Constants.FRAME_HEIGHT - ROUND);
+        POS_Y = 23 + r.nextInt(Constants.FRAME_HEIGHT - ROUND - 23);
         this.bGood = id % 2 == 0;
+        this.tc = TankClient.getInstance();
 	}
 
 	public Direction getDir() {
@@ -54,17 +50,11 @@ public class Tank{
     
     public void setDirection(Direction d) {
     	this.dir = d;
+    	if (dir != Direction.STAY) {
+			this.barrelDir = d;
+		}
     }
-    
-	public boolean hitTank(Tank b) {
-        if (!this.equals(b) && this.getRect().intersects(b.getRect())) {
-            POS_X = oldX;
-            POS_Y = oldY;
-            dir = directions[r.nextInt(8)];
-            return true;
-        }
-        return false;
-    }
+  
 
     public boolean isGood() {
         return bGood;
@@ -100,15 +90,12 @@ public class Tank{
 
         }
     }
-    public void changeDirection(Direction newDir) {
-        this.dir = newDir;
-    }
-
+    
     public void draw(Graphics g) {
         if (alive) {
             Color c = g.getColor();
             g.setColor(bGood? Color.RED : Color.LIGHT_GRAY);
-//            move();
+            move();
             g.fillOval(POS_X, POS_Y,ROUND, ROUND);
             drawBarrelPos(g);
             g.setColor(c);
@@ -120,65 +107,39 @@ public class Tank{
         }
     }
 
-//    public void setDirection() {
-//        if (step == 0 || POS_X <= 0 || POS_X >= Constants.FRAME_WIDTH - ROUND
-//                || POS_Y <= 23 || POS_Y >= Constants.FRAME_HEIGHT - ROUND) {
-//            step = r.nextInt(10);
-//            dir = directions[r.nextInt(directions.length)];
-//        }
-//
-//        if (dir != Direction.STAY) {
-//            barrelDir = dir;
-//        }
-//
-//        if (r.nextInt(40) > 35) {
-//            fire();
-//        }
-//    }
+    public void move() {
+        switch(dir) {
+            case D:
+                POS_Y += SPEED;
+                break;
+            case U:
+                POS_Y -= SPEED;
+                break;
+            case L:
+                POS_X -= SPEED;
+                break;
+            case R:
+                POS_X += SPEED;
+                break;
+            case LU:
+                POS_X -= SPEED;
+                POS_Y -= SPEED;
+                break;
+            case RU:
+                POS_X += SPEED;
+                POS_Y -= SPEED;
+                break;
+            case LD:
+                POS_X -= SPEED;
+                POS_Y += SPEED;
+                break;
+            case RD:
+                POS_X += SPEED;
+                POS_Y += SPEED;
+                break;
 
-//    public void move() {
-//        oldX = POS_X;
-//        oldY = POS_Y;
-//        setDirection();
-//        switch(dir) {
-//            case D:
-//                POS_Y += SPEED;
-//                break;
-//            case U:
-//                POS_Y -= SPEED;
-//                break;
-//            case L:
-//                POS_X -= SPEED;
-//                break;
-//            case R:
-//                POS_X += SPEED;
-//                break;
-//            case LU:
-//                POS_X -= SPEED;
-//                POS_Y -= SPEED;
-//                break;
-//            case RU:
-//                POS_X += SPEED;
-//                POS_Y -= SPEED;
-//                break;
-//            case LD:
-//                POS_X -= SPEED;
-//                POS_Y += SPEED;
-//                break;
-//            case RD:
-//                POS_X += SPEED;
-//                POS_Y += SPEED;
-//                break;
-//
-//        }
-//        POS_X = POS_X <= 0 ? 0 : POS_X >= Constants.FRAME_WIDTH - ROUND ? Constants.FRAME_WIDTH - ROUND: POS_X;
-//        POS_Y = POS_Y <= 23 ? 23 : POS_Y >= Constants.FRAME_HEIGHT - ROUND ? Constants.FRAME_HEIGHT - ROUND: POS_Y;
-//
-//        ArrayList<Tank> tanks = tc.getTanks();
-//        for (Tank c : tanks) {
-//            this.hitTank(c);
-//        }
-//    }
+        }
+    }
 
     public int getRound() {
         return ROUND;

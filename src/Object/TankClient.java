@@ -17,14 +17,14 @@ public class TankClient extends Frame {
 
 	public static final int FRAME_X = 100;
 	public static final int FRAME_Y = 100;
-	public final static TankClient tc = new TankClient();
+	public static final TankClient tc = new TankClient();
 
-	public MyTank myTank = new MyTank();
-	private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
-	private HashMap<Integer, Tank> tanks = new HashMap<Integer, Tank>();
+	public MyTank myTank;
+	private ArrayList<Bomb> bombs;
+	private HashMap<Integer, Tank> tanks;
 	Image offScreenImage = null;
-	private ArrayList<Explode> explodes = new ArrayList<Explode>();
-	private NetClient nc = new NetClient(this);
+	private ArrayList<Explode> explodes;
+	private NetClient nc;
 
 	
 
@@ -68,6 +68,11 @@ public class TankClient extends Frame {
 
 	public void launchFrame() {
 		
+		this.myTank = new MyTank();
+		this.bombs = new ArrayList<Bomb>();
+		this.tanks = new HashMap<Integer, Tank>();
+		this.explodes = new ArrayList<Explode>();
+		this.nc = new NetClient();
 		this.setLocation(FRAME_X, FRAME_Y);
 		this.setSize(Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
 		this.setResizable(false);
@@ -87,6 +92,7 @@ public class TankClient extends Frame {
 	}
 
 	public static void main(String[] args) {
+		
 		tc.launchFrame();
 	}
 
