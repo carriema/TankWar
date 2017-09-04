@@ -1,5 +1,6 @@
 package Object;
 
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.DatagramSocket;
@@ -141,5 +142,6 @@ public class MyTank extends Tank {
 		}
 		setDirection();
 	}
+	
 
 }

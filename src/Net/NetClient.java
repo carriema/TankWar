@@ -84,7 +84,7 @@ public class NetClient {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			while (socket != null) {
+			while (tc.myTank.alive) {
 				DatagramPacket dp = new DatagramPacket(buff, buff.length);
 				try {
 					socket.receive(dp);
@@ -95,6 +95,8 @@ public class NetClient {
 					e.printStackTrace();
 				}
 			}
+			socket.close();
+			tc.closeFrame();
 
 		}
 

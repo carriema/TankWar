@@ -54,9 +54,6 @@ public class TankClient extends Frame {
 
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
-		g.drawString(String.valueOf(bombs.size()), 100, 100);
-		g.drawString(String.valueOf(myTank.id), myTank.POS_X, myTank.POS_Y);
-		// myTank.draw(g);
 		synchronized (bombs) {
 			for (Iterator<Entry<Integer, Bomb>> it = bombs.entrySet().iterator(); it.hasNext();) {
 				Entry<Integer, Bomb> entry = it.next();
@@ -94,6 +91,10 @@ public class TankClient extends Frame {
 		}
 
 	}
+	
+	public void closeFrame() {
+		this.dispose();
+	}
 
 	public void launchFrame() {
 
@@ -117,7 +118,7 @@ public class TankClient extends Frame {
 
 		new Thread(new PaintThread()).start();
 
-		nc.connect("127.0.0.1", NetServer.TCP_PORT);
+		nc.connect(NetServer.IP_ADDRESS, NetServer.TCP_PORT);
 	}
 
 	public static void main(String[] args) {
