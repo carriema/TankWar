@@ -1,26 +1,38 @@
 package Object;
 
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import Message.TankStateChangeMsg;
+import Net.NetClient;
+import Net.NetServer;
 import Utils.Constants;
 
 /**
  * Created by myr on 6/24/17.
  */
 public class MyTank extends Tank {
+	DatagramSocket ds;
 
 	public MyTank() {
 		// TODO Auto-generated constructor stub
 		super();
+		try {
+			ds = new DatagramSocket(NetClient.udpPort);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	boolean bL = false, bU = false, bR = false, bD = false;
 
-	
 	public void setDirection() {
 		if (bL == true && bU == false && bR == false && bD == false) {
 			dir = Direction.L;
@@ -57,9 +69,15 @@ public class MyTank extends Tank {
 			}
 		}
 
-      POS_X = POS_X <= 0 ? 0 : POS_X >= Constants.FRAME_WIDTH - ROUND ? Constants.FRAME_WIDTH - ROUND: POS_X;
-      POS_Y = POS_Y <= 23 ? 23 : POS_Y >= Constants.FRAME_HEIGHT - ROUND ? Constants.FRAME_HEIGHT - ROUND: POS_Y;
-
+		POS_X = POS_X <= 0 ? 0 : POS_X >= Constants.FRAME_WIDTH - ROUND ? Constants.FRAME_WIDTH - ROUND : POS_X;
+		POS_Y = POS_Y <= 23 ? 23 : POS_Y >= Constants.FRAME_HEIGHT - ROUND ? Constants.FRAME_HEIGHT - ROUND : POS_Y;
+		TankStateChangeMsg tscm = new TankStateChangeMsg(this);
+		try {
+			ds.send(tscm.getMsg("127.0.0.1", NetServer.UDP_PORT));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void keyPressed(KeyEvent e) {

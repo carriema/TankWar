@@ -15,14 +15,14 @@ import Object.TankClient;
 
 public class NetClient {
 
-	public int udpPort;
+	public static int udpPort;
 	public TankClient tc;
 	public DatagramSocket socket;
 	private Random random = new Random();
 
 	public NetClient() {
 		this.tc = TankClient.getInstance();
-		udpPort = random.nextInt(60000);
+		this.udpPort = random.nextInt(60000);
 		System.out.println("udpPort: " + udpPort);
 		try {
 			socket = new DatagramSocket(udpPort);
